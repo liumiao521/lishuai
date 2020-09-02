@@ -1,0 +1,338 @@
+server:
+  port: 56806
+  tomcat:
+    max-swallow-size: -1
+    max-http-post-size: -1  #解决文件dev中自带tomcat上传文件大小限制
+    max-threads: 1000       #最大并发数
+    max-connections: 20000  #最大连接数
+  servlet:
+    context-path: /jeecg-boot
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
+
+spring:
+  application:
+    name: stat_platform_povertycensus
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  mail:
+    host: smtp.163.com
+    username: jeecgos@163.com
+    password: ??
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  ## quartz定时任务,采用数据库方式
+  quartz:
+    job-store-type: jdbc
+  #json 时间戳统一转换
+  jackson:
+    date-format:   yyyy-MM-dd HH:mm:ss
+    time-zone:   GMT+8
+  aop:
+    proxy-target-class: true
+  #配置freemarker
+  freemarker:
+    # 设置模板后缀名
+    suffix: .ftl
+    # 设置文档类型
+    content-type: text/html
+    # 设置页面编码格式
+    charset: UTF-8
+    # 设置页面缓存
+    cache: false
+    prefer-file-system-access: false
+    # 设置ftl文件路径
+    template-loader-path:
+      - classpath:/templates
+  # 设置静态文件路径，js,css等
+  mvc:
+    static-path-pattern: /**
+  resource:
+    static-locations: classpath:/static/,classpath:/public/
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        loginUsername: admin
+        loginPassword: 123456
+        allow:
+      web-stat-filter:
+        enabled: true
+    dynamic:
+      druid: # 全局druid参数，绝大部分值和默认保持一致。(现已支持的参数如下,不清楚含义不要乱设置)
+        # 连接池的配置信息
+        # 初始化大小，最小，最大
+        initial-size: 5
+        min-idle: 5
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        filters: stat,wall,slf4j
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+      primary: central_platform_db
+      # 设置默认的数据源或者数据源组,默认值即为master
+      strict: false # 设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
+      datasource:
+        # 数据源1-1 总管理平台数据库（读写）
+        central_platform_db:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_platform_evaluative?characterEncoding=UTF-8&useSSL=false&rewriteBatchedStatements=true&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino
+          password: $v3r58ih
+
+        # 数据源1-2 总管理平台数据库（只读）
+        central_platform_db_readonly:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_platform_evaluative?characterEncoding=UTF-8&useSSL=false&rewriteBatchedStatements=true&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino_readonly
+          password: $v3r58ih$$
+
+        # 数据源2-1 项目管理平台数据库（读写）
+        program_platform_db:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_platform_evaluative?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino
+          password: $v3r58ih
+
+        # 数据源2-2 项目管理平台数据库（只读）
+        program_platform_db_readonly:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_platform_evaluative?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino_readonly
+          password: $v3r58ih$$
+
+        # 数据源3-1 采集数据库（读写）
+        census_gather_db:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_gather?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino
+          password: $v3r58ih
+
+        # 数据源3-2 采集数据库（只读）
+        census_gather_db_readonly:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_gather?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino_readonly
+          password: $v3r58ih$$
+
+        # 数据源4-1 数据集数据库（读写）
+        census_dataset_db:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_dataset?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino
+          password: $v3r58ih
+
+        # 数据源4-2 数据集数据库（只读）
+        census_dataset_db_readonly:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.0.12.20:15004/poverty_census_dataset?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false
+          #username: census_out
+          #password: Census_#2@19
+          #username: census_out
+          #password: ENC(K/EA33BkrEXTzwHuWhNSiq9ofXT5R6JG)
+          username: uxsino_readonly
+          password: $v3r58ih$$
+
+  #redis 配置
+  redis:
+    database: 9
+    host: 10.0.4.16
+    #    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 8   #最大连接数据库连接数,设 0 为没有限制
+        max-idle: 8     #最大等待连接中的数量,设 0 为没有限制
+        max-wait: -1ms  #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        min-idle: 0     #最小等待连接中的数量,设 0 为没有限制
+      shutdown-timeout: 100ms
+    #    password: ylkj_8702
+    #    password: ENC(jnEidkf1gavoIpx7AvABK5h1Ny8lxFaI)
+    #    password: ''
+    password: Q2?-cT4MfbD6q
+    port: 16379
+
+#mybatis plus 设置
+mybatis-plus:
+  mapper-locations: classpath*:org/jeecg/modules/**/xml/*Mapper.xml
+  global-config:
+    # 关闭MP3.0自带的banner
+    banner: false
+    db-config:
+      #主键类型  0:"数据库ID自增",1:"该类型为未设置主键类型", 2:"用户输入ID",3:"全局唯一ID (数字类型唯一ID)", 4:"全局唯一ID UUID",5:"字符串全局唯一ID (idWorker 的字符串表示)";
+      id-type: ID_WORKER_STR
+      # 默认数据库表下划线命名
+      table-underline: true
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # callSettersOnNulls,map的value为null是也返回key
+    call-setters-on-nulls: true
+
+#jeecg专用配置
+jeecg :
+  path :
+    #文件上传根目录 设置
+    upload: /data/stat/upload
+    #文件下载根目录 设置
+    download: /data/stat/download
+    #webapp文件路径
+    webapp: /data/stat/webapp
+    #excel模板目录
+    excelTemplate: /templates/excelTemplate
+    #excel导出存放路径
+    excelExport: /export
+  #短信秘钥
+  sms:
+    accessKeyId: ??
+    accessKeySecret: ??
+  shiro:
+    #    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/queryaggregate/**,/meta/**,/program/**,/sys/sysDepart/**,/wechat/**,/sys/statUserProgramRel/**,/task/**,/plotting/**
+    excludeUrls:  /queryaggregate/**,/program/statRepresentedVariableQuestionnaireRel/list,/program/statRepresentedVariableQuestionnaireRel/updateRelations,/meta/statRepresentedVariable/listFullData,/program/statQuestionnaire/edit,/meta/statRepresentedVariable/**,/program/statQuestionnaire/**,/program/statRepresentedVariableQuestionnaireRel/**
+  #阿里云oss存储配置
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    accessKey: WegDpuKzOuPK6D3N
+    secretKey: ??
+    bucketName: jeecgos
+    staticDomain: ??
+  # ElasticSearch 设置
+  elasticsearch:
+    cluster-name: jeecg-ES
+    cluster-nodes: 127.0.0.1:9200
+  # 表单设计器配置
+  desform:
+    # 主题颜色（仅支持 16进制颜色代码）
+    theme-color: "#1890ff"
+  # 在线预览文件服务器地址配置
+  file-view-domain: http://127.0.0.1:8012
+#Mybatis输出sql日志
+logging:
+  level:
+    org.jeecg.modules.system.mapper : debug
+#cas单点登录
+cas:
+  #  prefixUrl: http://cas.example.org:8443/cas
+  prefixUrl: https://134.175.28.96:8443/cas
+
+# 企业微信相关配置(脱贫普查培训)
+wx:
+  miniapp:
+    configs:
+      - appid: ww5fe08e53178ca931
+        secret: fUtVI9VjLzzOV0cQbcrtrtx6nQn9O06i--w-Y7UNajw
+        address_book_secret: 4c3BaSWi7M1kDESHP6nJhwLi4TkLh3UjnWdYWkNEyDw  #通讯录编辑权限的secret
+        address_book_msgevent_token: pKsVZd4qejOVPi  #通讯录事件接受服务器的Token
+        address_book_msgevent_encodingaeskey: ByILSYNbydvY8pxjR6uIJQcXdc6NrAfP29qWJXWcZnO  #通讯录事件接受服务器的EncoddingAESKey
+        token: #微信小程序消息服务器配置的token
+        aesKey: #微信小程序消息服务器配置的EncodingAESKey
+        msgDataFormat: JSON
+
+
+# 自定义设置
+stat:
+  config:
+    crontab:
+      cron_wechat_access_token: 0 0 */1 * * ?  #每1小时执行一次
+      cron_wechat_departuser_sync: 0 */5 * * * ?  #每5min执行一次
+      cron_wechat_departuser_sync_enable: false #如果前端的定时管理不好用，可开启后端定时，默认不开启；
+    wechat:
+      call_wechat_api: false   #用户管理和部门管理，是否要同时调用企业微信接口做更新
+      default_user_password: tppc@  #从企业微信同步过来的用户默认密码
+    mybatis:
+      enable_interceptor_select: false   #是否启用mybatis拦截器拦截处理select请求加入用户权限过滤，待数据相对完备时要再细测，默认false
+    tif:  #统一身份认证相关配置
+      enable_filter: false
+      #sg_token: q9MUzAx8rINSdyzeAlxs4wnJfOvueOQb  #passid对应的passtoken
+      url: https://wgtest4-rkpc.tgovcloud.com
+      sg_token: X0Y4eU0eVL8JjifNuhuC3GY84JwE6Pif
+      paasid: ppv7
+      appid: pxv5
+#      url: https://wgtest5-rkpc.tgovcloud.com
+#      sg_token: goWAkWQPxq4GCrxJoCCNSC8ORcdwLKyR
+#      paasid: ppv6
+
+# jasypt加密的密匙，生产环境下注释掉,通过启动参数-Djasypt.encryptor.password=XXX，如果配置文件里配置了，传入的会覆盖
+#jasypt:
+#  encryptor:
+#    password: fc242664891f45e79995df9877e93787
+
+# 登录缓存配置，默认配置为5分钟内同一用户连续登录失败6次锁定用户5分钟
+login_cache_config:
+  failure_times: 6 # 连续登录失败次数
+  time_span: 5 # 时间跨度，单位分钟
+  lock_span: 5 # 时间跨度内超过连续登录失败次数用户锁定的时间长度，单位分钟
+
+# 是否生成swagger接口文档，生产环境建议关闭，避免暴露接口
+swagger:
+  enable: false
+
+#文件上传根目
+file:
+  initFload: false
+  # 合法文件后缀
+  suffixs: xls,xlsx,jpg,gif,png,ico,bmp,jpeg,doc,docx,pdf,csv
+  path :
+    upload: /platform_dj
+    xcxupload: /app_dj_test
+    export: /platform_dj/stat_export

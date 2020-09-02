@@ -1,0 +1,10 @@
+# 当前项目maven激活环境，例如：dev/test/prod，对应pom.xml中profile设置值
+spring:
+  profiles:
+    active: @profileActive@
+swagger:
+  production: false
+  basic:
+    enable: false
+    username: nvidia
+    password: nvidia1234
