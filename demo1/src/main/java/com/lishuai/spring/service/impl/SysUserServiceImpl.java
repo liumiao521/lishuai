@@ -1,6 +1,5 @@
 package com.lishuai.spring.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lishuai.spring.mapper.SysPermissionMapper;
 import com.lishuai.spring.mapper.SysRoleMapper;
@@ -134,9 +133,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SysUser getUserByName(String username) {
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        return sysUserMapper.getUserByName(username);
+        /*QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("del_flag", "0")
                 .eq("username", username);
-        return sysUserMapper.selectOne(queryWrapper);
+        return sysUserMapper.selectOne(queryWrapper);*/
     }
 }
