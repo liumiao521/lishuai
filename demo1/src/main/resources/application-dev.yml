@@ -24,8 +24,8 @@ spring:
       max-request-size: 1024MB
   #json 时间戳统一转换
   jackson:
-    date-format:   yyyy-MM-dd HH:mm:ss
-    time-zone:   GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   aop:
     proxy-target-class: true
   # 设置静态文件路径，js,css等
@@ -89,6 +89,19 @@ spring:
           #password: Census_#2@19
           username: root
           password: J2EESpring4
+  #redis 配置
+  redis:
+    database: 9
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 8   #最大连接数据库连接数,设 0 为没有限制
+        max-idle: 8     #最大等待连接中的数量,设 0 为没有限制
+        max-wait: -1ms  #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        min-idle: 0     #最小等待连接中的数量,设 0 为没有限制
+      shutdown-timeout: 100ms
+    password: ylkj_8702
+    port: 6379
 
 #mybatis plus 设置
 mybatis-plus:
@@ -116,6 +129,10 @@ login_cache_config:
 # 是否生成swagger接口文档，生产环境建议关闭，避免暴露接口
 swagger:
   enable: true
+
+#jeecg专用配置
+shiro:
+  excludeUrls: /queryaggregate/**,/program/statRepresentedVariableQuestionnaireRel/list,/program/statRepresentedVariableQuestionnaireRel/updateRelations,/meta/statRepresentedVariable/listFullData,/program/statQuestionnaire/edit,/meta/statRepresentedVariable/**,/program/statQuestionnaire/**,/program/statRepresentedVariableQuestionnaireRel/**
 
 #文件上传根目
 file:

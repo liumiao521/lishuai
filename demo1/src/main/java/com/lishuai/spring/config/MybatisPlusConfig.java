@@ -8,15 +8,15 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 单数据源配置（jeecg.datasource.open = false时生效）
- * @Author zhoujf
  *
+ * @Author zhoujf
  */
 @Configuration
-@MapperScan(value={"com.lishuai.spring.**.*mapper"})
+@MapperScan(value = {"com.lishuai.spring.mapper"})
 public class MybatisPlusConfig {
 
     /**
-         *  分页插件
+     * 分页插件
      */
     @Bean
     public MyPaginationInterceptor paginationInterceptor() {
@@ -36,6 +36,6 @@ public class MybatisPlusConfig {
 //    public PerformanceInterceptor performanceInterceptor() {
 //        return new PerformanceInterceptor();
 //    }
-    
-   
+
+
 }

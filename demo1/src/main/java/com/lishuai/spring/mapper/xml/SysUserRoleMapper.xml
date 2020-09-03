@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lishuai.spring.mapper.SysUserRoleMapper">
+
+	<update id="setDeleteByUserIds">
+		delete from sys_user_role
+		where user_id in
+		<foreach item="id" collection="userIds" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="dynamicDeleteSql" parameterType="String">
+        	${value}
+    </update>
+</mapper>
